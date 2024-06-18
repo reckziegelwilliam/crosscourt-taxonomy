@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "next lint",
     "preview": "next build && next start",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "ts-node ./prisma/seed.mjs"
   },
   "dependencies": {
     "@editorjs/code": "^2.8.0",
@@ -97,6 +98,7 @@
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "autoprefixer": "^10.4.14",
+    "bcrypt": "^5.1.1",
     "eslint": "^8.39.0",
     "eslint-config-next": "13.0.0",
     "eslint-config-prettier": "^8.8.0",

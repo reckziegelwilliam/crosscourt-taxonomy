@@ -3,7 +3,7 @@ import { Post } from "@prisma/client"
 
 import { formatDate } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
-import { PostOperations } from "@/components/post-operations"
+import { PostOperations } from "@/components/post/post-operations"
 
 interface PostItemProps {
   post: Pick<Post, "id" | "title" | "published" | "createdAt">
@@ -14,7 +14,7 @@ export function PostItem({ post }: PostItemProps) {
     <div className="flex items-center justify-between p-4">
       <div className="grid gap-1">
         <Link
-          href={`/editor/${post.id}`}
+          href={`/post-editor/${post.id}`}
           className="font-semibold hover:underline"
         >
           {post.title}

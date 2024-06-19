@@ -17,17 +17,17 @@ import { buttonVariants } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
-interface EditorProps {
+interface PostEditorProps {
   post: Pick<Post, "id" | "title" | "content" | "published">
 }
 
 type FormData = z.infer<typeof postPatchSchema>
 
-export function Editor({ post }: EditorProps) {
+export function PostEditor({ post }: PostEditorProps) {
   const { register, handleSubmit } = useForm<FormData>({
     resolver: zodResolver(postPatchSchema),
   })
-  const ref = React.useRef<EditorJS>()
+  const ref = React.useRef<EditorJS>() 
   const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
   const [isMounted, setIsMounted] = React.useState<boolean>(false)
@@ -126,7 +126,7 @@ export function Editor({ post }: EditorProps) {
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center space-x-10">
             <Link
-              href="/dashboard"
+              href="/dashboard/announcements"
               className={cn(buttonVariants({ variant: "ghost" }))}
             >
               <>

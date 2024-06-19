@@ -1,26 +1,28 @@
 import { redirect } from "next/navigation"
 
 import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
-import { EmptyPlaceholder } from "@/components/empty-placeholder"
+import { db } from "@/lib/db"
+
 import { DashboardHeader } from "@/components/header"
-import { EventCreateButton } from "@/components/event/event-create-button"
-import { EventItem } from "@/components/event/event-item"
 import { DashboardShell } from "@/components/shell"
+import { EmptyPlaceholder } from "@/components/empty-placeholder"
+import { PostCreateButton } from "@/components/post/post-create-button"
+import { PostItem } from "@/components/post/post-item"
 
 export const metadata = {
-  title: "Dashboard",
+  title: "Posts",
+  description: "Manage account posts.",
 }
 
-export default async function DashboardPage() {
+export default async function PostsPage() {
   const user = await getCurrentUser()
 
   if (!user) {
     redirect(authOptions?.pages?.signIn || "/login")
   }
 
-  const events = await db.event.findMany({
+  const posts = await db.post.findMany({
     where: {
       authorId: user.id,
     },
@@ -28,8 +30,6 @@ export default async function DashboardPage() {
       id: true,
       title: true,
       content: true,
-      startDate: true,
-      endDate: true,
       published: true,
       createdAt: true,
     },
@@ -40,24 +40,24 @@ export default async function DashboardPage() {
 
   return (
     <DashboardShell>
-      <DashboardHeader heading="Events" text="Create and manage events.">
-        <EventCreateButton />
+      <DashboardHeader heading="Posts" text="Create and manage posts.">
+        <PostCreateButton />
       </DashboardHeader>
       <div>
-        {events?.length ? (
+        {posts?.length ? (
           <div className="divide-y divide-border rounded-md border">
-            {events.map((event) => (
-              <EventItem key={event.id} event={event} />
+            {posts.map((post) => (
+              <PostItem key={post.id} post={post} />
             ))}
           </div>
         ) : (
           <EmptyPlaceholder>
-            <EmptyPlaceholder.Icon name="events" />
-            <EmptyPlaceholder.Title>No events created</EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Icon name="post" />
+            <EmptyPlaceholder.Title>No posts created</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>
-              You don&apos;t have any events yet. Start creating content.
+              You don&apos;t have any posts yet. Start creating content.
             </EmptyPlaceholder.Description>
-            <EventCreateButton variant="outline" />
+            <PostCreateButton variant="outline" />
           </EmptyPlaceholder>
         )}
       </div>

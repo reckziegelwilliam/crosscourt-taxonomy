@@ -1,20 +1,20 @@
 import { DashboardHeader } from "@/components/header"
-import { EventCreateButton } from "@/components/event/event-create-button"
-import { EventItem } from "@/components/event/event-item"
+import { PostCreateButton } from "@/components/post/post-create-button"
+import { PostItem } from "@/components/post/post-item"
 import { DashboardShell } from "@/components/shell"
 
 export default function DashboardLoading() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Posts" text="Create and manage posts.">
-        <EventCreateButton />
+        <PostCreateButton />
       </DashboardHeader>
       <div className="divide-border-200 divide-y rounded-md border">
-        <EventItem.Skeleton />
-        <EventItem.Skeleton />
-        <EventItem.Skeleton />
-        <EventItem.Skeleton />
-        <EventItem.Skeleton />
+        <PostItem.Skeleton />
+        <PostItem.Skeleton />
+        <PostItem.Skeleton />
+        <PostItem.Skeleton />
+        <PostItem.Skeleton />
       </div>
     </DashboardShell>
   )

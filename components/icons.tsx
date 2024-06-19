@@ -19,6 +19,7 @@ import {
   Plus,
   Settings,
   SunMedium,
+  Calendar,
   Trash,
   Twitter,
   User,
@@ -30,6 +31,9 @@ export type Icon = LucideIcon
 
 export const Icons = {
   logo: Command,
+  events: Calendar,
+  announcement: AlertTriangle,
+  staff: User,
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,

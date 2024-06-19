@@ -27,6 +27,14 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     EmailProvider({
+      server: {
+        host: env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || "587", 10),
+        auth: {
+          user: env.SMTP_USER,
+          pass: env.SMTP_PASS,
+        },
+      },
       from: env.SMTP_FROM,
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const user = await db.user.findUnique({
@@ -45,6 +53,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Missing template id")
         }
 
+        console.log(`Sending email to ${identifier}`);
+        console.log(`Using template ID: ${templateId}`);
+        console.log(`Action URL: ${url}`);
+
+      
         const result = await postmarkClient.sendEmailWithTemplate({
           TemplateId: parseInt(templateId),
           To: identifier,
@@ -62,6 +75,8 @@ export const authOptions: NextAuthOptions = {
             },
           ],
         })
+
+        console.log(`Email sending result:`, result);
 
         if (result.ErrorCode) {
           throw new Error(result.Message)

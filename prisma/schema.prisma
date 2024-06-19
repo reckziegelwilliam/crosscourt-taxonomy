@@ -6,10 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
+
 model Account {
   id                String   @id @default(cuid())
   userId            String
@@ -52,9 +53,10 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
-  accounts Account[]
-  sessions Session[]
-  Post     Post[]
+  accounts    Account[]
+  sessions    Session[]
+  Post        Post[]
+  tournaments Event[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -86,3 +88,97 @@ model Post {
 
   @@map(name: "posts")
 }
+
+model Event {
+  id         String       @id @default(cuid())
+  title      String
+  content    Json?
+  startDate  DateTime
+  endDate    DateTime
+  published  Boolean      @default(false)
+  createdAt  DateTime     @default(now()) @map(name: "created_at")
+  updatedAt  DateTime     @default(now()) @map(name: "updated_at")
+  authorId   String
+  Tournament Tournament[]
+
+  author User? @relation(fields: [authorId], references: [id]) // Use optional relation
+
+  @@map(name: "events")
+}
+
+enum TournamentType {
+  SINGLE_ELIMINATION
+  DOUBLE_ELIMINATION
+  ROUND_ROBIN
+  HYBRID
+}
+
+enum CompetitorType {
+  TEAM
+  PLAYER
+  BOTH
+}
+
+model Tournament {
+  id        String   @id @default(cuid())
+  title     String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  type      TournamentType @default(SINGLE_ELIMINATION) // Use the enum type here
+  competitorType CompetitorType @default(TEAM) // Use the enum type here
+  divisions  Division[]
+  eventId   String
+
+  event Event? @relation(fields: [eventId], references: [id]) // Use optional relation
+
+  @@map(name: "tournaments")
+}
+
+
+enum LevelType {
+  OPEN
+  A1
+  A2
+  B
+}
+
+enum GenderType {
+  MEN
+  WOMEN
+  MIXED
+}
+
+model Division {
+  id        String   @id @default(cuid())
+  title     String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  tournamentId String
+  gender GenderType @default(MIXED) // Use the enum type here
+  level LevelType @default(OPEN) // Use the enum type here
+
+  tournament Tournament? @relation(fields: [tournamentId], references: [id]) // Use optional relation
+
+  @@map(name: "brackets")
+}
+
+// enum MatchType {
+//   SINGLE
+//   BEST_OF
+// }
+
+// model Match {
+//   id        String   @id @default(cuid())
+//   title     String
+//   published Boolean  @default(false)
+//   createdAt DateTime @default(now()) @map(name: "created_at")
+//   updatedAt DateTime @default(now()) @map(name: "updated_at")
+//   matchType MatchType @default(SINGLE) // Use the enum type here
+//   divisionId String
+
+//   division Division? @relation(fields: [divisionId], references: [id]) // Use optional relation
+
+//   @@map(name: "matches")
+// }

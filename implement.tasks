@@ -1,0 +1,35 @@
+# Implementation
+
+## Overview
+☐ implement the following models:
+- [ ] tournaments
+- [ ] tournament bracket
+☐ add to vercel
+☐ add GoogleProviders
+
+
+### EventEditor 
+☐ Specify  errors
+
+
+### Match Registraiton
+☐  add to config
+☐ add as side nav in Login
+☐ list tournaments
+☐ create register button
+☐ if registered, create area for matches to show up as well as list of other users registered in the tournament
+
+### config/site.ts
+☐ create dropdown for events (different tournaments)
+☐ select icons to be used for each screen
+☐ create a list of all screens
+
+### components/event/event-operations.ts
+☐ rename calEvents
+
+### components ui/form.tsx
+☐ include datepicker
+
+### docker-composer.yml
+☐ incomplete implementation, research proper use
+

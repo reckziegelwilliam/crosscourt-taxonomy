@@ -1,0 +1,20 @@
+-- AlterTable
+ALTER TABLE `tournaments` ADD COLUMN `competitorType` ENUM('TEAM', 'PLAYER', 'BOTH') NOT NULL DEFAULT 'TEAM',
+    ADD COLUMN `type` ENUM('SINGLE_ELIMINATION', 'DOUBLE_ELIMINATION', 'ROUND_ROBIN', 'HYBRID') NOT NULL DEFAULT 'SINGLE_ELIMINATION';
+
+-- CreateTable
+CREATE TABLE `brackets` (
+    `id` VARCHAR(191) NOT NULL,
+    `title` VARCHAR(191) NOT NULL,
+    `published` BOOLEAN NOT NULL DEFAULT false,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `tournamentId` VARCHAR(191) NOT NULL,
+    `gender` ENUM('MEN', 'WOMEN', 'MIXED') NOT NULL DEFAULT 'MIXED',
+    `level` ENUM('OPEN', 'A1', 'A2', 'B') NOT NULL DEFAULT 'OPEN',
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `brackets` ADD CONSTRAINT `brackets_tournamentId_fkey` FOREIGN KEY (`tournamentId`) REFERENCES `tournaments`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

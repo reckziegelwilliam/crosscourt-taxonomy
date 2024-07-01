@@ -62,12 +62,6 @@ Current limitations and ongoing fixes:
 3. ~[Next.js 13: Client navigation not updating `<head>` tags correctly](https://github.com/vercel/next.js/issues/42414)~
 4. [Challenges with catch-all routes and image handling](https://github.com/vercel/next.js/issues/48162)
 
-## Why Not tRPC or Turborepo?
-
-We focus on leveraging Next.js to its full potential. Future iterations might explore additional tools based on feedback and evolving needs.
-
-Suggestions are welcome—please create an issue if you have ideas!
-
 ## Running Locally
 
 To set up and run the application locally:

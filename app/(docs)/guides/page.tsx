@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { allGuides } from "contentlayer/generated"
+// Replace with your own data-fetching logic
+// import { allGuides } from "contentlayer/generated"
 import { compareDesc } from "date-fns"
 
 import { formatDate } from "@/lib/utils"
@@ -11,12 +12,27 @@ export const metadata = {
     "This section includes end-to-end guides for developing Next.js 13 apps.",
 }
 
+// Replace with your own data-fetching logic
+const getGuides = () => {
+  // Placeholder logic
+  // Replace with your actual data fetching logic
+  return [
+    {
+      _id: "1",
+      slug: "/guides/sample-guide",
+      title: "Sample Guide",
+      description: "This is a sample guide description.",
+      date: "2023-01-01",
+      published: true,
+      featured: true
+    },
+    // Add more guide objects here
+  ].filter((guide) => guide.published)
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
+}
+
 export default function GuidesPage() {
-  const guides = allGuides
-    .filter((guide) => guide.published)
-    .sort((a, b) => {
-      return compareDesc(new Date(a.date), new Date(b.date))
-    })
+  const guides = getGuides()
 
   return (
     <div className="py-6 lg:py-10">

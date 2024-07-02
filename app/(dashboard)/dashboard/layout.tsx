@@ -11,6 +11,11 @@ interface DashboardLayoutProps {
   children?: React.ReactNode
 }
 
+export const metadata = {
+  title: "Dashboard",
+};
+
+
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {

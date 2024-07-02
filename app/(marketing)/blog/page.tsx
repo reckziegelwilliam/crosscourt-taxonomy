@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
-import { allPosts } from "contentlayer/generated"
+// Replace with your own data-fetching logic
+// import { allPosts } from "contentlayer/generated"
 import { compareDesc } from "date-fns"
 
 import { formatDate } from "@/lib/utils"
@@ -9,12 +10,27 @@ export const metadata = {
   title: "Blog",
 }
 
+// Replace with your own data-fetching logic
+const getPosts = () => {
+  // Placeholder logic
+  // Replace with your actual data fetching logic
+  return [
+    {
+      _id: "1",
+      slug: "/blog/sample-post",
+      title: "Sample Post",
+      description: "This is a sample post description.",
+      date: "2023-01-01",
+      published: true,
+      image: "/path/to/image.jpg"
+    },
+    // Add more post objects here
+  ].filter((post) => post.published)
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
+}
+
 export default async function BlogPage() {
-  const posts = allPosts
-    .filter((post) => post.published)
-    .sort((a, b) => {
-      return compareDesc(new Date(a.date), new Date(b.date))
-    })
+  const posts = getPosts()
 
   return (
     <div className="container max-w-4xl py-6 lg:py-10">

@@ -1,10 +1,13 @@
-import * as React from "react"
-import Image from "next/image"
-import { useMDXComponent } from "next-contentlayer/hooks"
+"use client";
 
-import { cn } from "@/lib/utils"
-import { Callout } from "@/components/callout"
-import { MdxCard } from "@/components/mdx-card"
+import * as React from "react";
+import { MDXProvider } from "@mdx-js/react";
+import { MDXRemote } from "next-mdx-remote";
+
+import { cn } from "@/lib/utils";
+import { Callout } from "@/components/callout";
+import { MdxCard } from "@/components/mdx-card";
+import Image from "next/image";
 
 const components = {
   h1: ({ className, ...props }) => (
@@ -150,18 +153,18 @@ const components = {
   Image,
   Callout,
   Card: MdxCard,
-}
+};
 
 interface MdxProps {
-  code: string
+  source: any;
 }
 
-export function Mdx({ code }: MdxProps) {
-  const Component = useMDXComponent(code)
-
+export function Mdx({ source }: MdxProps) {
   return (
-    <div className="mdx">
-      <Component components={components} />
-    </div>
-  )
+    <MDXProvider components={components}>
+      <div className="mdx">
+        <MDXRemote {...source} />
+      </div>
+    </MDXProvider>
+  );
 }

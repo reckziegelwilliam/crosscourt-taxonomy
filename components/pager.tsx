@@ -1,20 +1,30 @@
-import Link from "next/link"
-import { Doc } from "contentlayer/generated"
+"use client";
+import Link from "next/link";
+import { docsConfig } from "@/config/docs";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 
-import { docsConfig } from "@/config/docs"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+interface Doc {
+  slug: string;
+  slugAsParams: string;
+  title: string;
+  description?: string;
+  body: {
+    raw: string;
+    code: string;
+  };
+}
 
 interface DocsPagerProps {
-  doc: Doc
+  doc: Doc;
 }
 
 export function DocsPager({ doc }: DocsPagerProps) {
-  const pager = getPagerForDoc(doc)
+  const pager = getPagerForDoc(doc);
 
   if (!pager) {
-    return null
+    return null;
   }
 
   return (
@@ -24,7 +34,7 @@ export function DocsPager({ doc }: DocsPagerProps) {
           href={pager.prev.href}
           className={cn(buttonVariants({ variant: "ghost" }))}
         >
-          <Icons.chevronLeft className="mr-2 h-4 w-4" />
+          <Icons.chevronLeft className="mr-2 size-4" />
           {pager.prev.title}
         </Link>
       )}
@@ -34,31 +44,31 @@ export function DocsPager({ doc }: DocsPagerProps) {
           className={cn(buttonVariants({ variant: "ghost" }), "ml-auto")}
         >
           {pager.next.title}
-          <Icons.chevronRight className="ml-2 h-4 w-4" />
+          <Icons.chevronRight className="ml-2 size-4" />
         </Link>
       )}
     </div>
-  )
+  );
 }
 
 export function getPagerForDoc(doc: Doc) {
-  const flattenedLinks = [null, ...flatten(docsConfig.sidebarNav), null]
+  const flattenedLinks = [null, ...flatten(docsConfig.sidebarNav), null];
   const activeIndex = flattenedLinks.findIndex(
     (link) => doc.slug === link?.href
-  )
-  const prev = activeIndex !== 0 ? flattenedLinks[activeIndex - 1] : null
+  );
+  const prev = activeIndex !== 0 ? flattenedLinks[activeIndex - 1] : null;
   const next =
     activeIndex !== flattenedLinks.length - 1
       ? flattenedLinks[activeIndex + 1]
-      : null
+      : null;
   return {
     prev,
     next,
-  }
+  };
 }
 
-export function flatten(links: { items? }[]) {
+export function flatten(links: { items?: any[]; href?: string }[]) {
   return links.reduce((flat, link) => {
-    return flat.concat(link.items ? flatten(link.items) : link)
-  }, [])
+    return flat.concat(link.items ? flatten(link.items) : link);
+  }, []);
 }

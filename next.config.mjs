@@ -1,8 +1,9 @@
-import { withContentlayer } from "next-contentlayer"
+import withMDX from '@next/mdx';
 
-import "./env.mjs"
+const mdxConfig = withMDX({
+  extension: /\.mdx?$/,
+});
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -12,6 +13,26 @@ const nextConfig = {
     appDir: true,
     serverComponentsExternalPackages: ["@prisma/client"],
   },
-}
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        dns: false,
+        child_process: false,
+        tls: false,
+      };
+    }
 
-export default withContentlayer(nextConfig)
+    config.ignoreWarnings = [
+      (warning) =>
+        warning.message.includes('dynamic require') ||
+        warning.message.includes('cannot resolve'),
+    ];
+
+    return config;
+  },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+};
+
+export default mdxConfig(nextConfig);

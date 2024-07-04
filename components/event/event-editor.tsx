@@ -136,7 +136,7 @@ export function EventEditor({ event }: EventEditorProps) {
                 className={cn(buttonVariants({ variant: "ghost" }))}
               >
                 <>
-                  <Icons.chevronLeft className="mr-2 h-4 w-4" />
+                  <Icons.chevronLeft className="mr-2 size-4" /> {/* Reordered classes */}
                   Back
                 </>
               </Link>
@@ -145,7 +145,7 @@ export function EventEditor({ event }: EventEditorProps) {
               </p>
             </div>
             <button type="submit" className={cn(buttonVariants())}>
-              {isSaving && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              {isSaving && <Icons.spinner className="mr-2 size-4 animate-spin" />} {/* Reordered classes */}
               <span>Save</span>
             </button>
           </div>
@@ -158,7 +158,7 @@ export function EventEditor({ event }: EventEditorProps) {
               className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
               {...register("title")}
             />
-            <div className="grid grid-cols-2 gap-4 mt-auto">
+            <div className="mt-auto grid grid-cols-2 gap-4"> {/* Reordered classes */}
               <div className="grid grid-rows-6">
                 <CustomFormItem
                   label="Start Date"
@@ -175,7 +175,7 @@ export function EventEditor({ event }: EventEditorProps) {
                   type="date"
                 />
               </div>
-              <div id="editor" className="min-h-[500px] gap-2 mx-auto pl-4 outline-zinc-300 outline rounded-lg" />
+              <div id="editor" className="min-h-[500px] mx-auto pl-4 gap-2 rounded-lg outline outline-zinc-300" /> {/* Reordered classes */}
             </div>
             <p className="text-sm text-gray-500">
               Use{" "}

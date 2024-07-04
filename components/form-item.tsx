@@ -1,4 +1,5 @@
-// components/form-item.tsx
+"use client";
+
 import * as React from "react";
 import { UseFormRegister, FieldErrors, useFormContext } from "react-hook-form";
 import { FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";

@@ -51,7 +51,7 @@ export function EventCreateButton({
 
     const event = await response.json()
 
-    // Refresh the data
+    // This forces a cache invalidation.
     router.refresh()
 
     router.push(`/evt-editor/${event.id}`)
@@ -71,9 +71,9 @@ export function EventCreateButton({
       {...props}
     >
       {isLoading ? (
-        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        <Icons.spinner className="mr-2 size-4 animate-spin" />
       ) : (
-        <Icons.add className="mr-2 h-4 w-4" />
+        <Icons.add className="mr-2 size-4" />
       )}
       New Event
     </button>

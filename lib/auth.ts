@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
+import ResendProvider from "next-auth/providers/resend"
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github";
@@ -48,6 +49,36 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_ID,
       clientSecret: env.GOOGLE_SECRET,
       allowDangerousEmailAccountLinking: true,
+    }),
+    ResendProvider({
+      server: {
+        host: env.RESEND_HOST,
+        port: Number(env.RESEND_PORT),
+        auth: {
+          user: env.RESEND_USERNAME,
+          pass: env.RESEND_API_KEY,
+        },
+      },
+      async sendVerificationRequest({
+        identifier,
+        url,
+      }: {
+        identifier: string
+        url: string
+      }) {
+        try {
+          await resend.emails.send({
+            from: env.RESEND_EMAIL_FROM,
+            to: [identifier],
+            subject: `${siteConfig.name} magic link sign in`,
+            react: MagicLinkEmail({ identifier, url }),
+          })
+
+          console.log("Verification email sent")
+        } catch (error) {
+          throw new Error("Failed to send verification email")
+        }
+      },
     }),
     EmailProvider({
       from: env.SMTP_FROM,

@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { DocsSearch } from "@/components/search"
-import { DocsSidebarNav } from "@/components/sidebar-nav"
-import { SiteFooter } from "@/components/site-footer"
+import { DocsSidebarNav } from "@/components/shared/nav/sidebar-nav"
+import { SiteFooter } from "@/components/shared/nav/site-footer"
 
 interface DocsLayoutProps {
   children: React.ReactNode

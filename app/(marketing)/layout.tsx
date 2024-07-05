@@ -1,6 +1,6 @@
 import { MainNav } from "@/components/main-nav";
 import { UserLogin } from "@/components/user-login";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteFooter } from "@/components/shared/nav/site-footer";
 
 import { marketingConfig } from "@/config/marketing";
 

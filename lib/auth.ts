@@ -7,6 +7,7 @@ import { Client } from "postmark";
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
 import { db } from "@/lib/db";
+
 //************************************************************************* *///
 //TODO: fix this work around for rendering client side components
 // FIXME--
@@ -24,6 +25,7 @@ if (typeof window === "undefined") {
   tls = require("tls");
 }
 //************************************************************************* *///
+
 const postmarkClient = new Client(env.POSTMARK_API_TOKEN);
 
 export const authOptions: NextAuthOptions = {

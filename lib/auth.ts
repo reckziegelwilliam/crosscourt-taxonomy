@@ -1,14 +1,29 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { NextAuthOptions } from "next-auth"
-import EmailProvider from "next-auth/providers/email"
-import GitHubProvider from "next-auth/providers/github"
-import { Client } from "postmark"
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextAuthOptions } from "next-auth";
+import EmailProvider from "next-auth/providers/email";
+import GitHubProvider from "next-auth/providers/github";
+import { Client } from "postmark";
+import { env } from "@/env.mjs";
+import { siteConfig } from "@/config/site";
+import { db } from "@/lib/db";
+//************************************************************************* *///
+//TODO: fix this work around for rendering client side components
+// FIXME--
+// unknown package error for nodemailer
+// causing server-side error on client
 
-import { env } from "@/env.mjs"
-import { siteConfig } from "@/config/site"
-import { db } from "@/lib/db"
+// Conditionally import nodemailer and other node modules only on the server
+let nodemailer: any;
+let child_process: any;
+let tls: any;
 
-const postmarkClient = new Client(env.POSTMARK_API_TOKEN)
+if (typeof window === "undefined") {
+  nodemailer = require("nodemailer");
+  child_process = require("child_process");
+  tls = require("tls");
+}
+//************************************************************************* *///
+const postmarkClient = new Client(env.POSTMARK_API_TOKEN);
 
 export const authOptions: NextAuthOptions = {
   // huh any! I know.
@@ -27,14 +42,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     EmailProvider({
-      server: {
-        host: env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT || "587", 10),
-        auth: {
-          user: env.SMTP_USER,
-          pass: env.SMTP_PASS,
-        },
-      },
       from: env.SMTP_FROM,
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const user = await db.user.findUnique({
@@ -44,20 +51,15 @@ export const authOptions: NextAuthOptions = {
           select: {
             emailVerified: true,
           },
-        })
+        });
 
         const templateId = user?.emailVerified
           ? env.POSTMARK_SIGN_IN_TEMPLATE
-          : env.POSTMARK_ACTIVATION_TEMPLATE
+          : env.POSTMARK_ACTIVATION_TEMPLATE;
         if (!templateId) {
-          throw new Error("Missing template id")
+          throw new Error("Missing template id");
         }
 
-        console.log(`Sending email to ${identifier}`);
-        console.log(`Using template ID: ${templateId}`);
-        console.log(`Action URL: ${url}`);
-
-      
         const result = await postmarkClient.sendEmailWithTemplate({
           TemplateId: parseInt(templateId),
           To: identifier,
@@ -74,12 +76,10 @@ export const authOptions: NextAuthOptions = {
               Value: new Date().getTime() + "",
             },
           ],
-        })
-
-        console.log(`Email sending result:`, result);
+        });
 
         if (result.ErrorCode) {
-          throw new Error(result.Message)
+          throw new Error(result.Message);
         }
       },
     }),
@@ -87,26 +87,26 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ token, session }) {
       if (token) {
-        session.user.id = token.id
-        session.user.name = token.name
-        session.user.email = token.email
-        session.user.image = token.picture
+        session.user.id = token.id;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
       }
 
-      return session
+      return session;
     },
     async jwt({ token, user }) {
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
         },
-      })
+      });
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id
+          token.id = user?.id;
         }
-        return token
+        return token;
       }
 
       return {
@@ -114,7 +114,7 @@ export const authOptions: NextAuthOptions = {
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
-      }
+      };
     },
   },
-}
+};

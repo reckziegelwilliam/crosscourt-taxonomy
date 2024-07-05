@@ -30,6 +30,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false)
+  const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams()
 
   async function onSubmit(data: FormData) {
@@ -72,7 +73,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
-              disabled={isLoading || isGitHubLoading}
+              disabled={isLoading || isGitHubLoading || isGoogleLoading}
               {...register("email")}
             />
             {errors?.email && (
@@ -106,7 +107,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           setIsGitHubLoading(true)
           signIn("github")
         }}
-        disabled={isLoading || isGitHubLoading}
+        disabled={isLoading || isGitHubLoading || isGoogleLoading}
       >
         {isGitHubLoading ? (
           <Icons.spinner className="mr-2 size-4 animate-spin" />
@@ -114,6 +115,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Icons.gitHub className="mr-2 size-4" />
         )}{" "}
         Github
+      </button>
+      <button
+        type="button"
+        className={cn(buttonVariants({ variant: "outline" }))}
+        onClick={() => {
+          setIsGoogleLoading(true)
+          signIn("google")
+        }}
+        disabled={isLoading || isGoogleLoading || isGoogleLoading}
+      >
+        {isGoogleLoading ? (
+          <Icons.spinner className="mr-2 size-4 animate-spin" />
+        ) : (
+          <Icons.google className="mr-2 size-4" />
+        )}{" "}
+        Google
       </button>
     </div>
   )
